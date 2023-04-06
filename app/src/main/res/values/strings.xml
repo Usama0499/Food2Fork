@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Food2Fork</string>
+    <string name="pleaseWait">Please wait…</string>
+    <string name="view_all">view all</string>
+    <string name="total_movies">%1$d movies</string>
+    <string name="retry">Retry</string>
+    <string name="ok">OK</string>
+
+    <string name="dismiss">DISMISS</string>
+    <string name="feature_not_available">That feature is not available</string>
+    <string name="Error">Error</string>
+    <string name="Yes">Yes</string>
+    <string name="No">No</string>
+    <string name="search_hint">Search…</string>
+    <string name="no_network_msg">No network connection</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="last_updated_on">Last Updated %s by %s</string>
+</resources>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".ui.detail.RecipeDetailsFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/recipeCV"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="10dp"
+            android:clipToPadding="false"
+            app:cardBackgroundColor="@color/PrimaryDark"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="3dp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/recipeIv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                tools:ignore="ContentDescription"
+                tools:srcCompat="@tools:sample/avatars" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/recipeNameTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="20dp"
+            android:fontFamily="@font/pd_bold"
+            android:textColor="@color/text_color"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@id/recipeRatingTv"
+            app:layout_constraintStart_toStartOf="@id/recipeCV"
+            app:layout_constraintTop_toBottomOf="@+id/recipeCV"
+            tools:text="Title" />
+
+        <TextView
+            android:id="@+id/recipeRatingTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/pd_med"
+            android:maxLines="1"
+            android:textColor="@color/text_color"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@id/recipeCV"
+            app:layout_constraintTop_toTopOf="@+id/recipeNameTv"
+            tools:text="Rating" />
+
+        <TextView
+            android:id="@+id/recipeUpdatedTimeTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/pd_rg"
+            android:textColor="@color/text_color"
+            app:layout_constraintEnd_toEndOf="@id/recipeRatingTv"
+            app:layout_constraintStart_toStartOf="@id/recipeNameTv"
+            app:layout_constraintTop_toBottomOf="@+id/recipeNameTv"
+            tools:text="last updated time by publisher" />
+
+        <TextView
+            android:id="@+id/recipeIngredientsTv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/pd_rg"
+            android:textColor="@color/text_color"
+            app:layout_constraintEnd_toEndOf="@id/recipeRatingTv"
+            app:layout_constraintStart_toStartOf="@id/recipeNameTv"
+            app:layout_constraintTop_toBottomOf="@+id/recipeUpdatedTimeTv"
+            tools:text="List of Ingredients" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.core.widget.NestedScrollView>
