@@ -1,7 +1,7 @@
 # Food2Fork
 
 This project is a recipe app called "Food2Fork" designed for food enthusiasts. It allows users to easily search and find delicious recipes, filter them by categories, and even save their favorite recipes for future reference.
-This project inspired by [food2fork-compose](https://github.com/mitchtabian/food2fork-compose) created by Mitch Tabian and written in Kotlin.
+This project inspired by [food2fork-compose](https://github.com/mitchtabian/food2fork-compose).
 
 
 <img src="screenshots/demo.gif" width="250" hspace="10"><img src="screenshots/Screenshot_light.png" width="250" hspace="10"><img src="screenshots/Screenshot_dark.png" width="250" hspace="10">
