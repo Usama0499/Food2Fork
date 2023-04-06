@@ -4,7 +4,7 @@ This project is a recipe app called "Food2Fork" designed for food enthusiasts. I
 This project inspired by [food2fork-compose](https://github.com/mitchtabian/food2fork-compose) created by Mitch Tabian and written in Kotlin.
 
 
-<img src="screenshots/demo.gif" hspace="10">
+<img src="screenshots/demo.gif">
 <img src="screenshots/Screenshot_light.png" width="250" hspace="10"><img src="screenshots/Screenshot_dark.png" width="250" hspace="10">
 
 
