@@ -7,11 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.viewbinding.library.fragment.viewBinding
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.mindbuffer.foodfork.R
-import com.mindbuffer.foodfork.data.DataManager
 import com.mindbuffer.foodfork.databinding.FragmentSplashBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
