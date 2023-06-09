@@ -1,19 +1,18 @@
 package com.mindbuffer.foodfork.ui.home
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mindbuffer.foodfork.data.DataManager
-import com.mindbuffer.foodfork.data.model.others.RecipeCategories
 import com.mindbuffer.foodfork.data.model.db.RecipeEntity
 import com.mindbuffer.foodfork.data.model.domain.Recipe
+import com.mindbuffer.foodfork.data.model.others.RecipeCategories
 import com.mindbuffer.foodfork.utils.AppConstants.RECIPE_PAGINATION_PAGE_SIZE
 import com.mindbuffer.foodfork.utils.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -22,14 +21,16 @@ class HomeViewModel @Inject constructor(
     private val dataManager: DataManager,
 ) : ViewModel() {
 
-    private val _recipesCategories = MutableLiveData<List<RecipeCategories>>()
-    val recipesCategories: LiveData<List<RecipeCategories>>
+    private val _recipesCategories = MutableStateFlow<List<RecipeCategories>>(emptyList())
+    val recipesCategories: StateFlow<List<RecipeCategories>>
         get() = _recipesCategories
 
 
-    private val _recipes = MutableLiveData<NetworkResult<List<Recipe>>>()
-    val recipes: LiveData<NetworkResult<List<Recipe>>>
+    private val _recipes = MutableStateFlow<NetworkResult<List<Recipe>>>(NetworkResult.Loading())
+    val recipes: StateFlow<NetworkResult<List<Recipe>>>
         get() = _recipes
+
+
     private var recipesResponseList: MutableList<Recipe> = arrayListOf()
     private var pageNo = 1
     var query: String = ""
@@ -52,7 +53,7 @@ class HomeViewModel @Inject constructor(
     fun searchRecipeApiCall() {
         viewModelScope.launch {
             try {
-                _recipes.postValue(NetworkResult.Loading())
+                _recipes.emit(NetworkResult.Loading())
 
                 // just to show loading, cache is fast
                 delay(1000)
@@ -103,10 +104,10 @@ class HomeViewModel @Inject constructor(
                     val oldPodcasts = recipesResponseList
                     oldPodcasts.addAll(list)
                 }
-                _recipes.postValue(NetworkResult.Success(recipesResponseList))
+                _recipes.emit(NetworkResult.Success(recipesResponseList))
 
             } catch (e: Exception) {
-                _recipes.postValue(NetworkResult.Failure(false, null, e.message.toString()))
+                _recipes.emit(NetworkResult.Failure(false, null, e.message.toString()))
             }
         }
     }
@@ -125,7 +126,7 @@ class HomeViewModel @Inject constructor(
         categoryChips.add(RecipeCategories(8, "PIZZA"))
         categoryChips.add(RecipeCategories(9, "DONUT"))
 
-        _recipesCategories.postValue(categoryChips)
+        _recipesCategories.value = categoryChips
     }
 
     fun resetCategoryScrollPosition() {

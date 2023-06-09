@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import android.viewbinding.library.fragment.viewBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.mindbuffer.foodfork.R
@@ -17,6 +20,8 @@ import com.mindbuffer.foodfork.utils.dismissLoader
 import com.mindbuffer.foodfork.utils.handleApiError
 import com.mindbuffer.foodfork.utils.showLoader
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class RecipeDetailsFragment : Fragment() {
@@ -40,16 +45,24 @@ class RecipeDetailsFragment : Fragment() {
     }
 
     private fun setupUI() {
-        viewModel.getRecipe(args.recipeId)
+        // Only call the ViewModel function if the recipe ID has changed
+        if (viewModel.currentRecipeId != args.recipeId) {
+            viewModel.currentRecipeId = args.recipeId
+            viewModel.getRecipe(args.recipeId)
+        }
     }
 
     private fun setupObserver() {
-        viewModel.recipe.observe(viewLifecycleOwner) {
-            dismissLoader()
-            when (it) {
-                is NetworkResult.Success -> renderRecipe(it.data)
-                is NetworkResult.Loading -> showLoader()
-                is NetworkResult.Failure -> handleApiError(it)
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.recipe.collectLatest {
+                    dismissLoader()
+                    when (it) {
+                        is NetworkResult.Success -> renderRecipe(it.data)
+                        is NetworkResult.Loading -> showLoader()
+                        is NetworkResult.Failure -> handleApiError(it)
+                    }
+                }
             }
         }
     }

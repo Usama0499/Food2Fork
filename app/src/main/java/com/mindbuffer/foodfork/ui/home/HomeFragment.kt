@@ -8,6 +8,9 @@ import android.view.inputmethod.EditorInfo
 import android.viewbinding.library.fragment.viewBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
@@ -17,6 +20,8 @@ import com.mindbuffer.foodfork.data.model.others.RecipeCategories
 import com.mindbuffer.foodfork.databinding.FragmentHomeBinding
 import com.mindbuffer.foodfork.utils.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 
@@ -49,16 +54,25 @@ class HomeFragment : Fragment() {
 
     private fun setupObserver() {
 
-        viewModel.recipesCategories.observe(viewLifecycleOwner) {
-            renderCategoriesList(it)
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.recipesCategories.collectLatest {
+                    renderCategoriesList(it)
+                }
+            }
         }
 
-        viewModel.recipes.observe(viewLifecycleOwner) {
-            dismissLoader()
-            when (it) {
-                is NetworkResult.Success -> renderList(it.data)
-                is NetworkResult.Loading -> showLoader()
-                is NetworkResult.Failure -> handleApiError(it)
+
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.recipes.collectLatest {
+                    dismissLoader()
+                    when (it) {
+                        is NetworkResult.Success -> renderList(it.data)
+                        is NetworkResult.Loading -> showLoader()
+                        is NetworkResult.Failure -> handleApiError(it)
+                    }
+                }
             }
         }
     }
@@ -174,7 +188,6 @@ class HomeFragment : Fragment() {
             }
         }
     }
-
 
 
 }

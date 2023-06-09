@@ -1,7 +1,5 @@
 package com.mindbuffer.foodfork.ui.detail
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mindbuffer.foodfork.data.DataManager
@@ -10,6 +8,8 @@ import com.mindbuffer.foodfork.data.model.domain.Recipe
 import com.mindbuffer.foodfork.utils.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,14 +18,16 @@ class RecipeDetailsViewModel @Inject constructor(
     private val dataManager: DataManager,
 ) : ViewModel() {
 
-    private val _recipe = MutableLiveData<NetworkResult<Recipe>>()
-    val recipe: LiveData<NetworkResult<Recipe>>
+    private val _recipe = MutableStateFlow<NetworkResult<Recipe>>(NetworkResult.Loading())
+    val recipe: StateFlow<NetworkResult<Recipe>>
         get() = _recipe
+
+    var currentRecipeId: Int = -1
 
     fun getRecipe(recipeId: Int) {
         viewModelScope.launch {
             try {
-                _recipe.postValue(NetworkResult.Loading())
+                _recipe.emit(NetworkResult.Loading())
 
                 // just to show loading, cache is fast
                 delay(1000)
@@ -33,8 +35,8 @@ class RecipeDetailsViewModel @Inject constructor(
                 // get from cache
                 var recipe = dataManager.getRecipeById(recipeId)?.toRecipe()
 
-                if(recipe != null){
-                    _recipe.postValue(NetworkResult.Success(recipe))
+                if (recipe != null) {
+                    _recipe.emit(NetworkResult.Success(recipe))
                 }
                 // if the recipe is null, it means it was not in the cache for some reason. So get from network.
                 else {
@@ -50,21 +52,22 @@ class RecipeDetailsViewModel @Inject constructor(
                                 // get from cache
                                 recipe = dataManager.getRecipeById(recipeId)?.toRecipe()
                                 // post and finish
-                                if(recipe != null){
-                                    _recipe.postValue(NetworkResult.Success(recipe!!))
-                                } else{
+                                if (recipe != null) {
+                                    _recipe.emit(NetworkResult.Success(recipe!!))
+                                } else {
                                     throw Exception("Unable to get recipe from the cache.")
                                 }
                             }
+
                             else -> {
-                                if(it is NetworkResult.Failure) _recipe.postValue(it)
+                                if (it is NetworkResult.Failure) _recipe.emit(it)
                             }
                         }
                     }
                 }
 
             } catch (e: Exception) {
-                _recipe.postValue(NetworkResult.Failure(false, null, e.message.toString()))
+                _recipe.emit(NetworkResult.Failure(false, null, e.message.toString()))
             }
         }
     }
