@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.viewbinding.library.fragment.viewBinding
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.clearFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -50,6 +51,7 @@ class RecipeDetailsFragment : Fragment() {
             viewModel.currentRecipeId = args.recipeId
             viewModel.getRecipe(args.recipeId)
         }
+
     }
 
     private fun setupObserver() {
@@ -88,5 +90,9 @@ class RecipeDetailsFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        clearFragmentResultListener("backShareResult")
+    }
 
 }
