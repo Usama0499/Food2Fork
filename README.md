@@ -16,6 +16,7 @@ Android Jetpack Architecture Components used:
 - Kotlin
 - ViewModel
 - LiveData
+- Flows
 - Retrieve Network Data from API (REST API)
 - Database caching
 - Monitoring Network Connectivity
